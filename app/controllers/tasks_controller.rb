@@ -27,12 +27,6 @@ end
     @task = Task.find(params[:id])
   end
   
-  def update
-  end
-  
-  def destroy
-  end
-  
   private
   
   # Strong Parameter
