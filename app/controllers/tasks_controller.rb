@@ -1,8 +1,14 @@
 class TasksController < ApplicationController
   before_action :set_task, only:[:show, :edit, :update, :destroy]
-  
+  before_action :require_user_logged_in
+  before_action :correct_user, only: [:destroy]
+
   def index
-    @tasks = Task.all
+    if logged_in?
+      @user = current_user
+      @task = current_user.tasks.build
+      @tasks = current_user.tasks.order('created_at DESC').page(params[:page])
+    end
   end
   
   def show
@@ -13,8 +19,9 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(task_params)
-    
+    @task = current_user.tasks.build(task_params)
+    @task.user = current_user
+
     if @task.save
       flash[:success] = 'タスクが作成されました'
       redirect_to @task
@@ -59,4 +66,11 @@ end
     params.require(:task).permit(:content, :status)
     
   end
+  
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+    redirect_to @task
+  end
+end
 end

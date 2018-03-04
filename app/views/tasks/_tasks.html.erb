@@ -1,0 +1,14 @@
+<ul class="media-list">
+  <% @tasks.each do |task| %>
+      <div>
+        <p><%= task.content %></p>
+      <div>
+   <li><%= link_to task.id, user_path(user)  %> : <%= task.status %> &gt <%= task.content %></li>
+   </div>
+        </div>
+        
+  <% end %>
+  
+ <%= link_to '新規タスクの作成', new_task_path %>
+  <%= paginate tasks %>
+</ul>
